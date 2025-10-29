@@ -9,6 +9,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
     <style>
+        /* --- START OF ORIGINAL CSS CODE --- */
         :root {
             --bg-color: #b6e9fe;
             --text-color: #e2e8f0;
@@ -47,12 +48,43 @@
             color: white;
         }
 
-        #leaderboard-screen {
-            max-width: 700px;
+        #leaderboard-screen,
+        #admin-dashboard .leaderboard-container {
+            max-width: 900px;
             width: 95%;
             padding: 30px 40px;
             background: #2d3748;
             border-radius: 15px;
+            margin: 20px auto;
+        }
+
+        #admin-dashboard {
+            display: none;
+            flex-direction: column;
+            width: 95%;
+            max-width: 900px;
+            min-height: 100vh;
+            justify-content: flex-start;
+        }
+
+        #admin-dashboard .dashboard-header {
+            background: #4a5568;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        #admin-login-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #d69e2e 0%, #4c51bf 100%);
+            color: white;
+            padding: 20px;
+            user-select: none;
+            text-align: center;
         }
 
         h1 {
@@ -137,12 +169,66 @@
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
         }
 
+        /* New Admin/Login Button Styles */
+        #show-admin-login-btn {
+            background: #4a5568;
+            margin-top: 10px;
+            font-size: 1em;
+            padding: 10px 20px;
+        }
+
+        #show-admin-login-btn:hover {
+            background: #64748b;
+        }
+
+        #admin-login-btn,
+        #admin-logout-btn {
+            background: var(--secondary-color);
+            color: #2d3748;
+            font-weight: 700;
+        }
+
+        #admin-login-btn:hover {
+            background: #ffc266;
+        }
+
+        #admin-logout-btn {
+            background: #e53e3e;
+        }
+
+        #admin-logout-btn:hover {
+            background: #c53030;
+        }
+
+        #admin-download-report-btn {
+            background: var(--correct-color);
+        }
+
+        #admin-download-report-btn:hover {
+            background: #2f855a;
+        }
+
+
         .form-group {
             margin-bottom: 15px;
             width: 80%;
             max-width: 300px;
             align-items: center;
         }
+
+        /* Input fields on the new admin login screen */
+        #admin-login-screen input {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #4a5568;
+            background: #2d3748;
+            color: white;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
 
         .form-group label {
             display: block;
@@ -161,41 +247,46 @@
             box-sizing: border-box;
         }
 
-        #leaderboard-table {
+        #leaderboard-table,
+        #admin-leaderboard-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 1em;
+            font-size: 0.9em;
             margin-top: 20px;
         }
 
         #leaderboard-table th,
-        #leaderboard-table td {
-            padding: 12px 15px;
+        #leaderboard-table td,
+        #admin-leaderboard-table th,
+        #admin-leaderboard-table td {
+            padding: 10px 12px;
             border-bottom: 1px solid #4a5568;
             text-align: left;
         }
 
-        #leaderboard-table th {
+        #leaderboard-table th,
+        #admin-leaderboard-table th {
             background: #4a5568;
+            font-weight: bold;
+        }
+
+        .rank-1st td,
+        .rank-2nd td,
+        .rank-3rd td {
+            color: #333;
             font-weight: bold;
         }
 
         .rank-1st {
             background-color: #FFD700;
-            color: #333;
-            font-weight: bold;
         }
 
         .rank-2nd {
             background-color: #C0C0C0;
-            color: #333;
-            font-weight: bold;
         }
 
         .rank-3rd {
             background-color: #CD7F32;
-            color: #333;
-            font-weight: bold;
         }
 
         .leaderboard-pagination {
@@ -211,7 +302,8 @@
             font-size: 1.2em;
         }
 
-        #total-users-count {
+        #total-users-count,
+        #admin-total-users-count {
             text-align: center;
             margin-top: 10px;
             font-size: 1em;
@@ -425,6 +517,30 @@
             background: var(--info-color);
             color: white;
         }
+
+        /* Responsive Adjustment for smaller screens */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .video-section {
+                scale: 1;
+                min-width: unset;
+                width: 95%;
+                margin-top: 10px;
+            }
+
+            .grid-section {
+                scale: 1;
+                width: 95%;
+                min-width: unset;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* --- END OF ORIGINAL CSS CODE --- */
     </style>
 </head>
 
@@ -438,31 +554,35 @@
                 <input type="text" id="playerName" required>
             </div>
             <div class="form-group">
-                <label for="playerEmail">Email:</label>
+                <label for="playerEmail">Email (Primary ID):</label>
                 <input type="email" id="playerEmail" required>
             </div>
         </div>
 
         <hr>
-        <ul><li>Maximum score is 100.</li>
+        <ul>
+            <li>Maximum score is 100.</li>
             <li>Scoring:
-                
-                   +10 points for each correct decision.</li>
+
+                +10 points for each correct decision.</li>
             <li>Time decreases every two videos: 60s → 50s → 40s → 30s → 20s.</li>
 
-            <li>Watch the Video Carefully – Review the video to determine if a stowing action took place. <br> You may replay
+            <li>Watch the Video Carefully – Review the video to determine if a stowing action took place. <br> You may
+                replay
                 the video as many times as needed within the time limit.</li>
-            
-                    
+
+
             <li><b>Identify the Action –</b>
                 If stowing occurred, select "Stow" and choose the correct bin where the product was placed. <br>
                 If the action is anything other than stow, simply select the appropriate option — no bin selection is
                 required.</li>
-            <li><b>Submit Before Time Runs Out –</b> If you don’t answer within the given time, the game will automatically move to the next video.</li>
-            <li>Stay Focused – Accuracy and speed matter. Use your replays wisely and make your selection confidently before the timer ends.</li>
-            
-            
-            
+            <li><b>Submit Before Time Runs Out –</b> If you don’t answer within the given time, the game will
+                automatically move to the next video.</li>
+            <li>Stay Focused – Accuracy and speed matter. Use your replays wisely and make your selection confidently
+                before the timer ends.</li>
+
+
+
         </ul>
         <hr>
         <div class="options-container">
@@ -487,7 +607,18 @@
             </div>
         </div>
 
-        <button onclick="startGame()">Start Game</button>
+        <button onclick="checkAttemptStatus()">Start Game</button>
+        <button id="show-admin-login-btn" onclick="showAdminLoginScreen()">Admin Login</button>
+    </div>
+
+    <div id="admin-login-screen" class="screen-container" style="display: none;">
+        <h1>🔒 Admin Login</h1>
+        <div style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <input type="text" id="adminUsernameInput" placeholder="Username">
+            <input type="password" id="adminPasswordInput" placeholder="Password">
+        </div>
+        <button onclick="adminLogin()">Login</button>
+        <button onclick="showStartScreen()">Back to Game</button>
     </div>
 
     <div id="game-screen" style="display: none;">
@@ -526,8 +657,10 @@
                 <tr>
                     <th>Rank</th>
                     <th>Name</th>
+                    <th>Email</th>
                     <th>Score</th>
                     <th>Accuracy</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody id="leaderboard-body"></tbody>
@@ -540,6 +673,40 @@
         <p id="total-users-count">Total Users: 0</p>
         <button onclick="showStartScreen()">Play Again</button>
     </div>
+
+    <div id="admin-dashboard">
+        <div class="dashboard-header">
+            <h1>👑 Admin Dashboard</h1>
+            <p>Full trainee performance report access.</p>
+        </div>
+        <div class="leaderboard-container">
+            <h2>Full Leaderboard Report</h2>
+            <table id="admin-leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Score</th>
+                        <th>Accuracy</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-leaderboard-body"></tbody>
+            </table>
+            <div class="leaderboard-pagination">
+                <button class="pagination-btn" id="admin-prev-page-btn"> &lt; </button>
+                <span id="admin-page-count">Page 1 of 1</span>
+                <button class="pagination-btn" id="admin-next-page-btn"> &gt; </button>
+            </div>
+            <p id="admin-total-users-count">Total Users: 0</p>
+
+            <button id="admin-download-report-btn" onclick="downloadReport()">⬇️ DOWNLOAD REPORT</button>
+
+            <button id="admin-logout-btn" onclick="handleAdminLogout()">🔒 LOGOUT</button>
+        </div>
+    </div>
+
 
     <script>
         // Firebase config
@@ -554,8 +721,13 @@
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         } else {
-            firebase.app(); // if already initialized, use that one
+            firebase.app();
         }
+
+        /* --- Admin Credentials --- */
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'admin123';
+        let isAdminLoggedIn = false;
 
         let currentVideo = 1;
         let score = 0;
@@ -590,6 +762,80 @@
         let leaderboard = [];
         const LEADERBOARD_PAGE_SIZE = 10;
         let currentPage = 1;
+        let adminCurrentPage = 1;
+
+        // DOM for Pagination (initialized in window.onload)
+        let pageCountSpan;
+        let prevPageBtn;
+        let nextPageBtn;
+        let totalUsersCountSpan;
+
+        let adminPageCountSpan;
+        let adminPrevPageBtn;
+        let adminNextPageBtn;
+        let adminTotalUsersCountSpan;
+
+
+        // --- Utility Functions ---
+        function formatDate(timestamp) {
+            // CRITICAL FIX: Check explicitly for null or undefined before checking properties
+            if (!timestamp) {
+                return 'N/A';
+            }
+
+            // If it's not a number, check if it's the Firebase placeholder object
+            if (typeof timestamp !== 'number') {
+                if (typeof timestamp === 'object' && timestamp['.sv'] === 'timestamp') {
+                    return '...'; // Show a loading indicator until Firebase resolves it
+                }
+                return 'N/A';
+            }
+
+            // If it is a number, format it
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            });
+        }
+
+        function hideAllScreens() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('admin-login-screen').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('leaderboard-screen').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'none';
+        }
+
+        function showAdminLoginScreen() {
+            hideAllScreens();
+            document.getElementById('admin-login-screen').style.display = 'flex';
+        }
+
+        function showAdminDashboard() {
+            hideAllScreens();
+            isAdminLoggedIn = true;
+            adminCurrentPage = 1;
+            document.getElementById('admin-dashboard').style.display = 'flex';
+            updateAdminLeaderboardTable();
+        }
+
+        function handleAdminLogout() {
+            isAdminLoggedIn = false;
+            showStartScreen();
+        }
+
+        function adminLogin() {
+            const username = document.getElementById('adminUsernameInput').value.trim();
+            const password = document.getElementById('adminPasswordInput').value.trim();
+
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                showAdminDashboard();
+            } else {
+                alert('Invalid Admin Credentials.');
+            }
+        }
 
         // --- Firebase Integration ---
         const leaderboardRef = firebase.database().ref('leaderboard_stow');
@@ -598,37 +844,75 @@
             leaderboardRef.on('value', (snapshot) => {
                 const data = snapshot.val() || {};
                 leaderboard = Object.values(data);
-                updateLeaderboardTable();
+                updateLeaderboardTable('leaderboard-body', 'page-count', 'prev-page-btn', 'next-page-btn', 'total-users-count');
+                if (isAdminLoggedIn) {
+                    updateAdminLeaderboardTable();
+                }
             });
         }
+
+        function checkAttemptStatus() {
+            playerName = document.getElementById('playerName').value.trim();
+            playerEmail = document.getElementById('playerEmail').value.trim();
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!playerName || !playerEmail || !emailRegex.test(playerEmail)) {
+                showFeedback(false, null, 0, "Please enter a valid name and email to start the game.");
+                return;
+            }
+
+            const playerKey = btoa(playerEmail).replace(/[^a-zA-Z0-9]/g, '');
+
+            leaderboardRef.child(playerKey).once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    showFeedback(false, null, 0, "❌ Game already completed. You cannot re-attempt this test.");
+                } else {
+                    startGame();
+                }
+            });
+        }
+
 
         function saveScoreToFirebase() {
             if (!playerName || !playerEmail || totalAttempts === 0) return;
 
             const finalAccuracy = totalAttempts > 0 ? Math.round((correctCount / totalAttempts) * 100) : 0;
-            const playerKey = btoa(playerName + playerEmail).replace(/[^a-zA-Z0-9]/g, '');
+            const playerKey = btoa(playerEmail).replace(/[^a-zA-Z0-9]/g, '');
 
             const playerEntry = {
                 name: playerName,
                 email: playerEmail,
                 score: score,
-                accuracy: finalAccuracy
+                accuracy: finalAccuracy,
+                dateCompleted: firebase.database.ServerValue.TIMESTAMP
             };
 
             leaderboardRef.child(playerKey).set(playerEntry);
         }
 
-        function updateLeaderboardTable() {
+        function updateAdminLeaderboardTable() {
+            updateLeaderboardTable('admin-leaderboard-body', 'admin-page-count', 'admin-prev-page-btn', 'admin-next-page-btn', 'admin-total-users-count', true);
+        }
+
+
+        function updateLeaderboardTable(bodyId, pageCountId, prevBtnId, nextBtnId, totalUsersId, isAdmin = false) {
+            const tableBody = document.getElementById(bodyId);
+            const pageCountEl = document.getElementById(pageCountId);
+            const prevBtn = document.getElementById(prevBtnId);
+            const nextBtn = document.getElementById(nextBtnId);
+            const totalUsersEl = document.getElementById(totalUsersId);
+
+            let page = isAdmin ? adminCurrentPage : currentPage;
             const sorted = [...leaderboard].sort((a, b) => b.score - a.score);
             const totalUsers = sorted.length;
             const totalPages = Math.ceil(totalUsers / LEADERBOARD_PAGE_SIZE);
 
-            const startIndex = (currentPage - 1) * LEADERBOARD_PAGE_SIZE;
+            const startIndex = (page - 1) * LEADERBOARD_PAGE_SIZE;
             const endIndex = startIndex + LEADERBOARD_PAGE_SIZE;
             const displayedEntries = sorted.slice(startIndex, endIndex);
 
-            const leaderboardBody = document.getElementById('leaderboard-body');
-            leaderboardBody.innerHTML = '';
+            tableBody.innerHTML = '';
 
             displayedEntries.forEach((entry, index) => {
                 const rank = startIndex + index + 1;
@@ -642,30 +926,79 @@
                     tr.classList.add('rank-3rd');
                 }
 
+                const date = formatDate(entry.dateCompleted);
+
                 tr.innerHTML = `
                     <td>${rank}</td>
-                    <td>${entry.name}</td>
-                    <td>${entry.score}</td>
-                    <td>${entry.accuracy}%</td>
+                    <td>${entry.name || 'N/A'}</td>
+                    <td>${entry.email || 'N/A'}</td>
+                    <td>${entry.score || 0}</td>
+                    <td>${entry.accuracy || 0}%</td>
+                    <td>${date}</td>
                 `;
-                leaderboardBody.appendChild(tr);
+                tableBody.appendChild(tr);
             });
 
-            document.getElementById('page-count').textContent = `Page ${currentPage} of ${totalPages || 1}`;
-            document.getElementById('prev-page-btn').disabled = currentPage === 1;
-            document.getElementById('next-page-btn').disabled = currentPage >= totalPages;
-            document.getElementById('total-users-count').textContent = `Total Users: ${totalUsers}`;
+            if (pageCountEl) pageCountEl.textContent = `Page ${page} of ${totalPages || 1}`;
+            if (prevBtn) prevBtn.disabled = page === 1;
+            if (nextBtn) nextBtn.disabled = page >= totalPages;
+            if (totalUsersEl) totalUsersEl.textContent = `Total Users: ${totalUsers}`;
         }
+
+        /* --- Download Report Function (Adapted for Single-Level Game) --- */
+        function downloadReport() {
+            if (leaderboard.length === 0) {
+                alert('No data to download.');
+                return;
+            }
+
+            // Headers adapted for the single-level Stow & Go game data structure
+            const headers = [
+                'Rank', 'Name', 'Email', 'Score', 'Accuracy (%)', 'Date Completed'
+            ];
+
+            const sorted = [...leaderboard].sort((a, b) => b.score - a.score);
+
+            let csvContent = headers.join(',') + '\n';
+
+            sorted.forEach((entry, index) => {
+                const rank = index + 1;
+
+                // CRITICAL FIX: Extract the raw date, handle non-numeric/null values gracefully for CSV output.
+                const rawDate = entry.dateCompleted;
+                const dateTimestamp = (typeof rawDate === 'number') ? rawDate : null;
+
+                const row = [
+                    rank,
+                    `"${entry.name || 'N/A'}"`,
+                    `"${entry.email || 'N/A'}"`,
+                    entry.score || 0,
+                    entry.accuracy || 0,
+                    formatDate(dateTimestamp)
+                ].join(',');
+
+                csvContent += row + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'StowGo_Report_' + new Date().toISOString().slice(0, 10) + '.csv');
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('Your browser does not support downloading files directly.');
+            }
+        }
+
 
         // --- Game Logic ---
         function startGame() {
-            playerName = document.getElementById('playerName').value.trim();
-            playerEmail = document.getElementById('playerEmail').value.trim();
-
-            if (!playerName || !playerEmail) {
-                showFeedback(false, null, 0, "Please enter your name and email to start the game.");
-                return;
-            }
 
             score = 0;
             correctCount = 0;
@@ -674,7 +1007,7 @@
             document.getElementById('score').textContent = score;
             document.getElementById('accuracy').textContent = '100';
 
-            document.getElementById('start-screen').style.display = 'none';
+            hideAllScreens();
             document.getElementById('game-screen').style.display = 'flex';
             buildGrid();
             updateProgress();
@@ -835,23 +1168,29 @@
 
         function endGame() {
             saveScoreToFirebase();
-            document.getElementById('game-screen').style.display = 'none';
+            hideAllScreens();
             document.getElementById('leaderboard-screen').style.display = 'flex';
         }
 
         function showStartScreen() {
-            document.getElementById('leaderboard-screen').style.display = 'none';
+            hideAllScreens();
             document.getElementById('start-screen').style.display = 'flex';
             currentVideo = 1;
             score = 0;
             correctCount = 0;
             totalAttempts = 0;
+            // Clear inputs for next player
+            document.getElementById('playerName').value = '';
+            document.getElementById('playerEmail').value = '';
+            document.getElementById('adminUsernameInput').value = '';
+            document.getElementById('adminPasswordInput').value = '';
         }
 
+        // --- Pagination Logic ---
         document.getElementById('prev-page-btn').addEventListener('click', () => {
             if (currentPage > 1) {
                 currentPage--;
-                updateLeaderboardTable();
+                updateLeaderboardTable('leaderboard-body', 'page-count', 'prev-page-btn', 'next-page-btn', 'total-users-count');
             }
         });
 
@@ -859,16 +1198,41 @@
             const totalPages = Math.ceil(leaderboard.length / LEADERBOARD_PAGE_SIZE);
             if (currentPage < totalPages) {
                 currentPage++;
-                updateLeaderboardTable();
+                updateLeaderboardTable('leaderboard-body', 'page-count', 'prev-page-btn', 'next-page-btn', 'total-users-count');
+            }
+        });
+
+        document.getElementById('admin-prev-page-btn').addEventListener('click', () => {
+            if (adminCurrentPage > 1) {
+                adminCurrentPage--;
+                updateAdminLeaderboardTable();
+            }
+        });
+
+        document.getElementById('admin-next-page-btn').addEventListener('click', () => {
+            const totalPages = Math.ceil(leaderboard.length / LEADERBOARD_PAGE_SIZE);
+            if (adminCurrentPage < totalPages) {
+                adminCurrentPage++;
+                updateAdminLeaderboardTable();
             }
         });
 
         window.onload = () => {
+            // Initialize DOM elements for pagination
+            pageCountSpan = document.getElementById('page-count');
+            prevPageBtn = document.getElementById('prev-page-btn');
+            nextPageBtn = document.getElementById('next-page-btn');
+            totalUsersCountSpan = document.getElementById('total-users-count');
+
+            adminPageCountSpan = document.getElementById('admin-page-count');
+            adminPrevPageBtn = document.getElementById('admin-prev-page-btn');
+            adminNextPageBtn = document.getElementById('admin-next-page-btn');
+            adminTotalUsersCountSpan = document.getElementById('admin-total-users-count');
+
             setupLeaderboardListener();
+            showStartScreen(); // Start at the welcome screen
         };
     </script>
 </body>
 
 </html>
-
-
